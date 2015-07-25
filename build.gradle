@@ -1,17 +1,17 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-
+apply plugin: "java"
+apply plugin: "groovy"
 
 repositories { mavenCentral() }
 
+
 dependencies {
-	compile'org.codehaus.groovy:groovy-all:2.4.3'
-	testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-	testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
+	compile"org.codehaus.groovy:groovy-all:2.4.3"
+	testCompile "org.spockframework:spock-core:${spockVersion}"
+	testCompile "org.spockframework:spock-spring:${spockVersion}"
 
-	compile 'org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE'
-	testCompile 'org.springframework:spring-test:4.1.7.RELEASE'
+	compile "org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE"
+	testCompile "org.springframework:spring-test:4.1.7.RELEASE"
 
-	compile 'io.undertow:undertow-core:1.2.9.Final'
-	compile 'io.undertow:undertow-servlet:1.2.9.Final'
+	compile "io.undertow:undertow-core:${undertowVersion}"
+	compile "io.undertow:undertow-servlet:${undertowVersion}"
 }
