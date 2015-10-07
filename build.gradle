@@ -3,6 +3,10 @@ apply plugin: "groovy"
 
 repositories { mavenCentral() }
 
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 dependencies {
 	compile"org.codehaus.groovy:groovy-all:2.4.3"
@@ -14,4 +18,57 @@ dependencies {
 
 	compile "io.undertow:undertow-core:${undertowVersion}"
 	compile "io.undertow:undertow-servlet:${undertowVersion}"
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.taskdefs.condition.Os
+
+processResources {
+	//parse json config file from root of project into map
+	def slu = new groovy.json.JsonSlurper().parseText(new File(projectDir, "config.json").text)
+
+	//check out what evn is used
+    def environment = project.hasProperty('env') ? env : 'local'
+    project.ext.environment = environment
+
+	//put all props from json config file
+    def p = new Properties()
+    p.putAll(slu.environments[environment])
+
+    p.each { k, v -> project.ext.set(k, v) }
+
+    println "Environment is set to '$environment'."
+
+	// don't use cached result, reran task any time
+    outputs.upToDateWhen { false }
+
+	//replace placeholders like database={db.url}
+    filter(ReplaceTokens, tokens: project.ext.properties, beginToken : '{', endToken : '}')
+}
+
+/**
+* Grant task to process static resources
+*/
+task minify(type: GruntTask) {
+    gruntArgs = "minify"
+}
+
+task normalize(type: GruntTask) {
+    gruntArgs = "normalize"
+}
+
+class GruntTask extends Exec {
+    private String gruntExecutable = Os.isFamily(Os.FAMILY_WINDOWS) ? "grunt.cmd" : "grunt"
+    private String switches = "--no-color"
+
+    String gruntArgs = ""
+
+    public GruntTask() {
+        super()
+        this.setExecutable(gruntExecutable)
+    }
+
+    public void setGruntArgs(String gruntArgs) {
+        this.args = "$switches $gruntArgs".trim().split(" ") as List
+    }
 }

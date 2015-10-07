@@ -1,0 +1,18 @@
+{
+    "environments": {
+        "local": {
+	        "db.url": "127.0.0.1",
+	        "db.name": "questionnaire",
+	        "db.user": "questionnaire",
+	        "db.password": "questionnaire",
+	        
+	        "server.port" : "7000"
+    	},
+        "dev": {
+        },
+        "qa": {
+        },
+        "prod": {
+        }
+    }
+}
