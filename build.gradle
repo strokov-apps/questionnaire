@@ -1,11 +1,29 @@
 apply plugin: "java"
 apply plugin: "groovy"
+apply plugin: 'spring-boot'
 
-repositories { mavenCentral() }
+repositories { 
+	mavenCentral() 
+}
 
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'questionnaire.client.Boot'
+    }
+}
+
+buildscript {
+	repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
+    }
 }
 
 dependencies {
@@ -71,4 +89,13 @@ class GruntTask extends Exec {
     public void setGruntArgs(String gruntArgs) {
         this.args = "$switches $gruntArgs".trim().split(" ") as List
     }
+}
+
+task start(dependsOn: [build]) << {
+	//It’s the same as running ‘java -jar ProjectArchive.jar’.
+	javaexec {
+		jvmArgs "-Xdebug", "-agentlib:jdwp=transport=dt_socket,address=9898,server=y,suspend=n"
+		main="-jar"
+		args jar.archivePath		
+	}
 }
