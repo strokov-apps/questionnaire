@@ -1,6 +1,0 @@
-add angular with structure of pages
-add materialize
-add processing for static resources
-add Require.js
-add React.js
-add PostgreSQL

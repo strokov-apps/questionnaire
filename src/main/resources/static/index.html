@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="questionnaire">
 	<head>
+		<title>Questionnaire</title>
 		<meta charset="UTF-8">
-			<title>Hello</title>
-		</head>
-	<body>
-		Hello
+		<script type="text/javascript" src="vendor/angular/angular.js"></script>
+		<script type="text/javascript" src="js/questionnaire.js"></script>
+	</head>
+	<body ng-controller="HomeController">
+		Say {{ 'hello' +  'to' }} word
 	</body>
 </html>
