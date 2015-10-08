@@ -11,12 +11,6 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'questionnaire.client.Boot'
-    }
-}
-
 buildscript {
 	repositories {
         mavenCentral()
