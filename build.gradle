@@ -1,6 +1,39 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
+		classpath 'com.moowork.gradle:gradle-node-plugin:0.11'
+		classpath 'com.moowork.gradle:gradle-grunt-plugin:0.11'
+	}
+}
+
 apply plugin: "java"
 apply plugin: "groovy"
-apply plugin: 'spring-boot'
+apply plugin: "spring-boot"
+apply plugin: "com.moowork.node"
+apply plugin: 'com.moowork.grunt'
+
+node {
+	version = '4.2.1'
+	download = true
+}
+
+grunt_normal.dependsOn installGrunt
+grunt_normal.dependsOn npmInstall
+build.dependsOn grunt_normal
+
+sourceSets {
+	main {
+		resources {
+			exclude 'static-src'
+		}
+	}
+}
 
 repositories { 
 	mavenCentral() 
@@ -9,15 +42,6 @@ repositories {
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-buildscript {
-	repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
-    }
 }
 
 dependencies {
@@ -56,33 +80,6 @@ processResources {
 
 	//replace placeholders like database={db.url}
     filter(ReplaceTokens, tokens: project.ext.properties, beginToken : '{', endToken : '}')
-}
-
-/**
-* Grant task to process static resources
-*/
-task minify(type: GruntTask) {
-    gruntArgs = "minify"
-}
-
-task normalize(type: GruntTask) {
-    gruntArgs = "normalize"
-}
-
-class GruntTask extends Exec {
-    private String gruntExecutable = Os.isFamily(Os.FAMILY_WINDOWS) ? "grunt.cmd" : "grunt"
-    private String switches = "--no-color"
-
-    String gruntArgs = ""
-
-    public GruntTask() {
-        super()
-        this.setExecutable(gruntExecutable)
-    }
-
-    public void setGruntArgs(String gruntArgs) {
-        this.args = "$switches $gruntArgs".trim().split(" ") as List
-    }
 }
 
 task start(dependsOn: [build]) << {

@@ -40,18 +40,14 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            // copy all files into custom webapp folder
             normal: {
                 files: [
-                    { cwd: 'src/main/resources/static/fonts', src: '**/*', dest: 'src/main/static-compiled/fonts', expand: true },
-                    { cwd: 'src/main/resources/static/images', src: '**/*', dest: 'src/main/static-compiled/resources/images', expand: true },
-                    { cwd: 'src/main/resources/static/vendor', src: '**/*', dest: 'src/main/static-compiled/resources/vendor', expand: true },
-                    { cwd: 'src/main/resources/static/js', src: '**/*', dest: 'src/main/static-compiled/resources/js', expand: true },
-                    { cwd: 'src/main/resources/temp/css', src: '**/*', dest: 'src/main/static-compiled/resources/css', expand: true },
-                    { cwd: 'src/main/resources', src: '*', dest: 'src/main/static-compiled', expand: true, filter: 'isFile' }
+                    {
+                        cwd: 'src/main/resources/static-src', src: '**/*',
+                        dest: 'src/main/resources/static', expand: true
+                    }
                 ]
             },
-            // copy all files into custom webapp folder, except css, js folders.
             min: {
                 files: [
                     { cwd: 'src/main/webapp/resources/locales', src: '**/*', dest: 'src/main/static-compiled/resources/locales', expand: true },
@@ -69,10 +65,9 @@ module.exports = function (grunt) {
                 expand: true
             }
         },
-        // clean temp webapp folder
         clean: {
             temp: ['src/main/static-compiled/temp'],
-            static-compiled: ['src/main/static-compiled']
+            static: ['src/main/resources/static']
         },
         //  .js -> .js.min && .css -> css.min
         replace: {
@@ -130,6 +125,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
 
     // list of tasks
-    grunt.registerTask('minify', ['clean:static-compiled', 'sass', 'copy:min', 'uglify', 'cssmin', 'replace:min', 'copy:web', 'clean:temp']);
-    grunt.registerTask('normalize', ['clean:static-compiled', 'sass', 'copy:normal', 'replace:normal', 'copy:web', 'clean:temp']);
+    //grunt.registerTask('minify', ['clean:static-compiled', 'sass', 'copy:min', 'uglify', 'cssmin', 'replace:min', 'copy:web', 'clean:temp']);
+    grunt.registerTask('normal', ['clean:static', 'copy:normal']);
 };
