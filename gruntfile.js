@@ -43,8 +43,10 @@ module.exports = function (grunt) {
             normal: {
                 files: [
                     {
-                        cwd: 'src/main/resources/static-src', src: '**/*',
-                        dest: 'src/main/resources/static', expand: true
+                        cwd: 'src/main/resources/static-src',
+                        src: ['**/*', '!**/scss/**'],
+                        dest: 'src/main/resources/static',
+                        expand: true
                     }
                 ]
             },
