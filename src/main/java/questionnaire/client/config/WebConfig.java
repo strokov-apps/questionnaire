@@ -1,28 +1,38 @@
 package questionnaire.client.config;
 
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import questionnaire.client.web.IndexController;
+import questionnaire.client.web.CalculatorEndpoint;
+
+import javax.validation.constraints.NotNull;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan(basePackageClasses = {
-	IndexController.class
+    CalculatorEndpoint.class
 })
-public class WebConfig extends WebMvcConfigurerAdapter {
-	@Bean
-	UndertowEmbeddedServletContainerFactory embeddedServletContainerFactory() {
-		return new UndertowEmbeddedServletContainerFactory();
-	}
+public class WebConfig {
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**").addResourceLocations("/static/");
-	}
+    @Bean
+    UndertowEmbeddedServletContainerFactory embeddedServletContainerFactory(@NotNull @Value("${server.port}") Integer serverPort) {
+        return new UndertowEmbeddedServletContainerFactory(serverPort);
+    }
+
+    /**
+     * All Endpoints must be registered here before they can be accessed
+     * */
+    @Bean
+    ResourceConfig jerseyConfig(@NotNull @Value("${static.content.path.regex}") String staticContentPathRegex) {
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, staticContentPathRegex);
+
+        // Endpoint registration
+        resourceConfig.register(CalculatorEndpoint.class);
+        return resourceConfig;
+    }
 }
