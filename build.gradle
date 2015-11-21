@@ -19,12 +19,12 @@ apply plugin: 'com.moowork.grunt'
 apply plugin: "com.github.robfletcher.compass"
 
 node {
-	version = '4.2.1'
+	version = nodeVersion
 	download = true
 }
 
+installGrunt.dependsOn npmInstall
 grunt_normal.dependsOn installGrunt
-grunt_normal.dependsOn npmInstall
 grunt_normal.dependsOn compassCompile
 build.dependsOn grunt_normal
 

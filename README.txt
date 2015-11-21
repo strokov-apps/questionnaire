@@ -1,14 +1,8 @@
-Install Ruby (need for scss, don't forget to mark checkbox "Add to PATH".)
-after that get latest updates for RubyGems
->gem update --system
-
-Install Compass
->gem install compass
-
-Install Sass
->gem install sass
-
 Can be added late:
+	Akka for java
+	HikaryCP
+	Hibernate
 	PostgreSQL
-	Require.js
-	materialize
+	Add Babel (ES6) + Flow(type checker for js)
+	materialize (it's cool, I've already used it)
+	Require.js (?)

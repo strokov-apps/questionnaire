@@ -23,22 +23,6 @@ module.exports = function (grunt) {
             }
         },
 
-        sass : {
-            compile : {
-                options : {
-                    sourcemap : 'none',
-                    compass: true
-                },
-                files : [{
-                    expand : true,
-                    cwd : 'src/main/resources/scss',
-                    src : ['**/*.scss', '**/*.css'],
-                    dest : 'src/main/static-compiled/temp/css',
-                    ext : '.css'
-                }]
-            }
-        },
-
         copy: {
             normal: {
                 files: [
@@ -117,14 +101,26 @@ module.exports = function (grunt) {
             }
         }
     });
-
+/*
+    requirejs: {
+    	dev: {
+    	    options: {
+    	    	baseUrl: "path/to/base",
+    	    	mainConfigFile: "path/to/config.js",
+    	    	name: "path/to/almond", // assumes a production build using almond, if you don't use almond, you need to set the "includes" or "modules" option instead of name
+    	    	out: "path/to/optimized.js"
+    	    }
+    	}
+    }
+*/
     // load plugins
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-replace');
-    grunt.loadNpmTasks('grunt-contrib-sass');
 
     // list of tasks
     //grunt.registerTask('minify', ['clean:static-compiled', 'sass', 'copy:min', 'uglify', 'cssmin', 'replace:min', 'copy:web', 'clean:temp']);
